@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import ConfettiExplosion from 'react-confetti-explosion'; // Import ConfettiExplosion component
+import MusicFile from './Cherry.mp3'; // Import the music file
 
 export default function Page() {
   const [noCount, setNoCount] = useState(0);
@@ -10,6 +11,7 @@ export default function Page() {
     left: "60px" // Initial left position set to 0
   });
   const [showConfetti, setShowConfetti] = useState(false); // State to track whether to show confetti
+  const [audio] = useState(new Audio(MusicFile)); // Initialize audio element with music file
 
   const yesButtonSize = noCount * 20 + 16;
 
@@ -32,6 +34,21 @@ export default function Page() {
     }
   }, [noCount]);
 
+  useEffect(() => {
+    // Play the audio silently to unlock it for later playback
+    audio.volume = 0;
+    audio.play().then(() => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+
+    // Cleanup function to pause music on component unmount
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [audio]);
+
   const handleNoClick = () => {
     setNoCount(noCount + 1);
   };
@@ -39,7 +56,7 @@ export default function Page() {
   const getNoButtonText = () => {
     const phrases = [
       "No",
-      "ure bub?",
+      "Sure bub?",
       "Really sure bubbb?",
       "Soch le bhyii!",
       "Last chance!",
@@ -55,6 +72,9 @@ export default function Page() {
   const handleYesClick = () => {
     setYesPressed(true);
     setShowConfetti(true);
+    // Play the audio when the user clicks "Yes"
+    audio.volume = 1; // Set the volume to audible
+    audio.play().catch(error => console.error('Error playing audio:', error));
   };
 
   return (
