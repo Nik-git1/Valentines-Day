@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import ConfettiExplosion from 'react-confetti-explosion'; // Import ConfettiExplosion component
 import MusicFile from './Cherry.mp3'; // Import the music file
@@ -17,15 +17,16 @@ export default function Page() {
 
   useEffect(() => {
     if (noCount > 0) {
-      function handleResize() {
-        const maxWidth = window.innerWidth - 100; // Adjusted to account for button width
-        const maxHeight = window.innerHeight - 100; // Adjusted to account for button height
+      const handleResize = () => {
+        const maxWidth = window.innerWidth - 100;
+        const maxHeight = window.innerHeight - 100;
         const newPosition = {
-          top: Math.random() * maxHeight,
-          left: Math.random() * maxWidth
+          top: `${Math.random() * maxHeight}px`, // Convert to string with 'px' suffix
+          left: `${Math.random() * maxWidth}px`, // Convert to string with 'px' suffix
         };
         setButtonPosition(newPosition);
-      }
+      };
+      
 
       window.addEventListener("resize", handleResize);
       handleResize();
